@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Static Image Hamburger Menu</title>
+    <title>Spritesheet Hamburger Menu</title>
     <style>
         /* --- General Styling --- */
         body {
@@ -25,18 +25,35 @@
             font-size: 1.5em;
         }
 
-        /* --- Menu Icon Styling (The Single Image) --- */
-        .menu-icon-img {
+        /* --- Menu Icon Styling (The Spritesheet) --- */
+        .menu-icon-btn {
             cursor: pointer;
-            width: 30px; /* Adjust size as needed */
-            height: auto;
+            width: 42px; /* Width of a single frame */
+            height: 42px; /* Height of a single frame */
+            background-image: url('hamburger_katana_spritesheet_42h_003.png');
+            background-repeat: no-repeat;
+            /* Start with the first frame (hamburger, assumed at position 0 0) */
+            background-position: 0 0;
+            border: none;
+            background-color: transparent;
+            /* Add smooth transition for the icon change */
+            transition: background-position 0.3s steps(1);
         }
+
+        /* Class added by JavaScript to change the icon state */
+        .menu-icon-btn.is-active {
+            /* Switch to the last frame (crossed swords)
+               Assuming 8 frames, total width 336px.
+               Last frame is at -294px position (7 * 42px) */
+            background-position: -294px 0;
+        }
+
 
         /* --- Navigation Menu Styling --- */
         nav {
             display: none; /* Hidden by default */
             position: absolute;
-            top: 50px; /* Below the header */
+            top: 62px; /* Below the header (42px icon height + 20px header padding) */
             right: 0;
             background-color: #444;
             flex-direction: column;
@@ -63,14 +80,13 @@
 
     <header>
         <div class="logo">Website Logo</div>
-        
-        <!-- This line is updated to use your image file -->
-        <img 
-            src="hamburger_katana_spritesheet_42h_003.png" 
-            alt="Menu Icon" 
-            class="menu-icon-img" 
+
+        <!-- Changed from <img> to a <button> for better semantics and using CSS background -->
+        <button
+            class="menu-icon-btn"
             onclick="toggleMenu()"
-        >
+            aria-label="Toggle Menu"
+        ></button>
 
         <!-- The navigation menu content -->
         <nav id="navigationMenu">
@@ -83,16 +99,20 @@
 
     <div class="content" style="padding: 20px;">
         <h2>Main Content Area</h2>
-        <p>This menu uses your custom static image as the trigger icon. The icon itself does not change when the menu opens.</p>
+        <p>This menu now uses CSS sprites to change the icon state when clicked.</p>
     </div>
 
     <script>
-        // JavaScript function to toggle the menu visibility
+        // JavaScript function to toggle the menu visibility and icon state
         function toggleMenu() {
             const menu = document.getElementById('navigationMenu');
-            
+            const iconButton = document.querySelector('.menu-icon-btn');
+
             // Toggle the 'open' class on the menu (which changes its display from none to flex in CSS)
             menu.classList.toggle('open');
+
+            // Toggle the 'is-active' class on the button (which changes background-position in CSS)
+            iconButton.classList.toggle('is-active');
         }
     </script>
 
